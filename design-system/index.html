@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Vitrine Viva Design System</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* =====================================================
+     VITRINE VIVA — DESIGN SYSTEM v1.0
+     Layout: nav fixa + sidebar numerada + hero marinho com toldo + módulos
+     Tema único (claro) por escolha: a documentação usa a própria marca.
+     ===================================================== */
+  :root {
+    color-scheme: light;
+
+    /* CORES — Marca: Marinho */
+    --vv-navy-950: #0E1629;
+    --vv-navy:     #16213E;
+    --vv-navy-700: #243258;
+    --vv-navy-300: #A3ABBD;
+    --vv-navy-100: #E3E6EC;
+    --vv-navy-50:  #F4F5F7;
+
+    /* CORES — Marca: Coral */
+    --vv-coral:        #E8461F;
+    --vv-coral-strong: #C2391A;
+    --vv-coral-deep:   #A3311A;
+    --vv-coral-bright: #FF6A45;
+    --vv-coral-100:    #FDECE6;
+
+    /* CORES — Texto e superfícies */
+    --vv-white:      #FFFFFF;
+    --vv-text:       #16213E;
+    --vv-text-muted: #555C70;
+    --vv-bg:         #F4F5F7;
+    --vv-surface:    #FFFFFF;
+    --vv-border:     #E3E6EC;
+    --vv-border-strong: #C9CED9;
+
+    /* CORES — Status */
+    --vv-success: #0B7A5C;  --vv-success-bg: #E6F4EF;
+    --vv-warning: #8A5A0F;  --vv-warning-bg: #FBF1DD;
+    --vv-error:   #C21F4E;  --vv-error-bg:   #FBE6EC;
+    --vv-info:    #2E62D9;  --vv-info-bg:    #E7EEFC;
+
+    /* CORES — Código (blocos escuros) */
+    --vv-code-bg: #0E1629;
+    --vv-code-text: #E3E6EC;
+    --vv-code-prop: #FF8A6B;
+    --vv-code-comment: #A3ABBD;
+
+    /* TIPOGRAFIA */
+    --vv-font: 'Sora', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --vv-font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --vv-text-xs: 0.75rem;    /* 12 */
+    --vv-text-sm: 0.875rem;   /* 14 */
+    --vv-text-md: 1rem;       /* 16 */
+    --vv-text-lg: 1.125rem;   /* 18 */
+    --vv-text-xl: 1.25rem;    /* 20 */
+    --vv-text-2xl: 1.5rem;    /* 24 */
+    --vv-text-3xl: 2rem;      /* 32 */
+    --vv-text-4xl: 2.5rem;    /* 40 */
+    --vv-text-5xl: 3.5rem;    /* 56 */
+    --vv-text-6xl: 4.5rem;    /* 72 */
+    --vv-tracking-display: -0.045em;
+    --vv-tracking-heading: -0.03em;
+    --vv-tracking-label: 0.14em;
+
+    /* ESPAÇAMENTO — base 4px */
+    --vv-space-1: 4px;   --vv-space-2: 8px;   --vv-space-3: 12px;
+    --vv-space-4: 16px;  --vv-space-6: 24px;  --vv-space-8: 32px;
+    --vv-space-12: 48px; --vv-space-16: 64px; --vv-space-24: 96px;
+    --vv-space-32: 128px;
+
+    /* BORDAS */
+    --vv-radius-sm: 6px;
+    --vv-radius-md: 10px;
+    --vv-radius-lg: 16px;
+    --vv-radius-xl: 24px;
+    --vv-radius-full: 9999px;
+
+    /* SOMBRAS — tom marinho, nunca preto puro */
+    --vv-shadow-xs: 0 1px 2px rgba(22, 33, 62, 0.06);
+    --vv-shadow-sm: 0 2px 8px rgba(22, 33, 62, 0.08);
+    --vv-shadow-md: 0 8px 24px rgba(22, 33, 62, 0.10);
+    --vv-shadow-lg: 0 20px 48px rgba(22, 33, 62, 0.14);
+    --vv-shadow-cta: 0 8px 20px rgba(194, 57, 26, 0.28);
+    --vv-focus-ring: 0 0 0 3px rgba(232, 70, 31, 0.40);
+
+    /* MOVIMENTO */
+    --vv-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --vv-duration: 200ms;
+
+    /* Layout da documentação */
+    --nav-h: 64px;
+    --sidebar-w: 260px;
+  }
+
+  /* ===== BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 16px); }
+  body {
+    margin: 0;
+    font-family: var(--vv-font);
+    background: var(--vv-bg);
+    color: var(--vv-text);
+    font-size: var(--vv-text-md);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px); z-index: 110; background: var(--vv-white);
+  }
+  h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  a { color: var(--vv-coral-strong); }
+  :focus-visible { outline: none; box-shadow: var(--vv-focus-ring); border-radius: var(--vv-radius-sm); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ===== TOP NAV ===== */
+  .top-nav {
+    position: fixed; z-index: 100;
+    top: env(safe-area-inset-top, 0px); left: 0; right: 0;
+    height: var(--nav-h);
+    display: flex; align-items: center; justify-content: space-between; gap: var(--vv-space-6);
+    padding-left: max(24px, env(safe-area-inset-left, 0px));
+    padding-right: max(24px, env(safe-area-inset-right, 0px));
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--vv-border);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .wordmark { font-size: 22px; letter-spacing: var(--vv-tracking-display); line-height: 1; color: var(--vv-navy); }
+  .wordmark .w1 { font-weight: 500; }
+  .wordmark .w2 { font-weight: 700; color: var(--vv-coral); }
+  .top-nav nav { display: flex; gap: var(--vv-space-6); }
+  .top-nav nav a {
+    color: var(--vv-text-muted); text-decoration: none; font-size: var(--vv-text-sm); font-weight: 500;
+    transition: color var(--vv-duration) var(--vv-ease);
+  }
+  .top-nav nav a:hover { color: var(--vv-navy); }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    position: fixed; z-index: 50;
+    left: 0; top: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); bottom: 0;
+    width: var(--sidebar-w);
+    padding: var(--vv-space-6) var(--vv-space-4);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    overflow-y: auto;
+    background: var(--vv-white);
+    border-right: 1px solid var(--vv-border);
+  }
+  .sidebar-label {
+    font-size: 11px; font-weight: 600; letter-spacing: var(--vv-tracking-label); text-transform: uppercase;
+    color: var(--vv-text-muted); margin: 0 0 var(--vv-space-3); padding-left: var(--vv-space-3);
+  }
+  .sidebar a {
+    display: flex; align-items: center; gap: var(--vv-space-3);
+    min-height: 40px; padding: 0 var(--vv-space-3); margin-bottom: 2px;
+    border-radius: var(--vv-radius-md);
+    color: var(--vv-text-muted); text-decoration: none; font-size: var(--vv-text-sm); font-weight: 500;
+    transition: background var(--vv-duration) var(--vv-ease), color var(--vv-duration) var(--vv-ease);
+  }
+  .sidebar a:hover { background: var(--vv-navy-50); color: var(--vv-navy); }
+  .sidebar a.active { background: var(--vv-coral-100); color: var(--vv-coral-deep); }
+  .sidebar .num { font-family: var(--vv-font-mono); font-size: 11px; width: 20px; color: inherit; opacity: 0.7; }
+  .sidebar-foot {
+    margin-top: var(--vv-space-8); padding: var(--vv-space-4) var(--vv-space-3);
+    border-top: 1px solid var(--vv-border); font-size: var(--vv-text-xs); color: var(--vv-text-muted);
+  }
+
+  /* ===== MAIN ===== */
+  .main { margin-left: var(--sidebar-w); padding-top: var(--nav-h); min-width: 0; }
+  .wrap {
+    max-width: 1080px;
+    padding-left: max(48px, env(safe-area-inset-left, 0px));
+    padding-right: max(48px, env(safe-area-inset-right, 0px));
+  }
+
+  /* ===== HERO ===== */
+  .hero { position: relative; background: var(--vv-navy); color: var(--vv-white); overflow: hidden; }
+  .hero .awning { display: block; width: 100%; height: 40px; }
+  .hero .wrap { padding-block: var(--vv-space-16) var(--vv-space-16); position: relative; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: var(--vv-space-2);
+    padding: 6px 14px; margin-bottom: var(--vv-space-6);
+    border: 1px solid rgba(255, 106, 69, 0.45); border-radius: var(--vv-radius-full);
+    font-size: var(--vv-text-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--vv-coral-bright);
+  }
+  .hero-badge::before {
+    content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--vv-coral-bright);
+    animation: pulse 2.2s var(--vv-ease) infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .hero h1 {
+    font-size: clamp(2.75rem, 7vw, var(--vv-text-6xl));
+    font-weight: 500; line-height: 1; letter-spacing: var(--vv-tracking-display);
+    margin-bottom: var(--vv-space-6);
+  }
+  .hero h1 b { font-weight: 700; color: var(--vv-coral-bright); }
+  .hero p { font-size: var(--vv-text-lg); color: var(--vv-navy-300); max-width: 56ch; }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: var(--vv-space-8); margin-top: var(--vv-space-12);
+    padding-top: var(--vv-space-6); border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .hero-meta div { display: grid; gap: 2px; }
+  .hero-meta span { font-size: var(--vv-text-xs); letter-spacing: var(--vv-tracking-label); text-transform: uppercase; color: var(--vv-navy-300); }
+  .hero-meta strong { font-size: var(--vv-text-md); font-weight: 600; }
+
+  /* ===== SECTIONS ===== */
+  .section { background: var(--vv-surface); border-bottom: 1px solid var(--vv-border); }
+  .section:nth-of-type(even) { background: var(--vv-bg); }
+  .section > .wrap { padding-block: var(--vv-space-16); }
+  .section-header { margin-bottom: var(--vv-space-12); }
+  .section-number {
+    font-family: var(--vv-font-mono); font-size: var(--vv-text-xs); letter-spacing: 0.12em;
+    color: var(--vv-coral-strong); margin-bottom: var(--vv-space-2);
+  }
+  .section-title {
+    font-size: var(--vv-text-4xl); font-weight: 600; letter-spacing: var(--vv-tracking-heading);
+    line-height: 1.1; color: var(--vv-navy); margin-bottom: var(--vv-space-3);
+  }
+  .section-desc { color: var(--vv-text-muted); max-width: 62ch; }
+  .sub-title {
+    font-size: var(--vv-text-xl); font-weight: 600; letter-spacing: -0.02em; color: var(--vv-navy);
+    margin: var(--vv-space-12) 0 var(--vv-space-4);
+  }
+  .sub-title:first-child { margin-top: 0; }
+  .note { font-size: var(--vv-text-sm); color: var(--vv-text-muted); margin-top: var(--vv-space-3); }
+
+  /* ===== MARCA ===== */
+  .logo-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--vv-space-4); }
+  .logo-tile {
+    border-radius: var(--vv-radius-lg); border: 1px solid var(--vv-border); overflow: hidden;
+    display: grid; grid-template-rows: 1fr auto; min-height: 220px;
+  }
+  .logo-stage { display: flex; align-items: center; justify-content: center; gap: 14px; padding: var(--vv-space-8) var(--vv-space-4); }
+  .logo-stage .wm { font-size: 34px; letter-spacing: var(--vv-tracking-display); line-height: 1; }
+  .logo-stage .wm .w1 { font-weight: 500; }
+  .logo-stage .wm .w2 { font-weight: 700; }
+  .logo-cap { padding: var(--vv-space-3) var(--vv-space-4); background: var(--vv-white); border-top: 1px solid var(--vv-border); font-size: var(--vv-text-xs); color: var(--vv-text-muted); }
+  .logo-cap b { color: var(--vv-navy); font-weight: 600; }
+  .on-light { background: var(--vv-white); }
+  .on-light .w1 { color: var(--vv-navy); } .on-light .w2 { color: var(--vv-coral); }
+  .on-navy { background: var(--vv-navy); }
+  .on-navy .w1 { color: var(--vv-white); } .on-navy .w2 { color: var(--vv-coral-bright); }
+  .on-coral { background: var(--vv-coral-strong); }
+  .on-coral .w1, .on-coral .w2 { color: var(--vv-white); }
+
+  .rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--vv-space-4); margin-top: var(--vv-space-4); }
+  .rule {
+    background: var(--vv-white); border: 1px solid var(--vv-border); border-radius: var(--vv-radius-lg);
+    padding: var(--vv-space-6); display: grid; gap: var(--vv-space-2); align-content: start;
+  }
+  .rule h4 { font-size: var(--vv-text-md); font-weight: 600; }
+  .rule p { font-size: var(--vv-text-sm); color: var(--vv-text-muted); }
+  .sizes { display: flex; align-items: flex-end; gap: var(--vv-space-6); margin-bottom: var(--vv-space-2); }
+
+  /* ===== CORES ===== */
+  .accent-strip {
+    display: flex; height: 56px; margin-bottom: var(--vv-space-8);
+    border-radius: var(--vv-radius-lg); overflow: hidden; border: 1px solid var(--vv-border);
+  }
+  .accent-strip div { flex: 1; display: flex; align-items: flex-end; padding: 8px 10px; }
+  .accent-strip span { font-family: var(--vv-font-mono); font-size: 11px; }
+  .color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: var(--vv-space-4); }
+  .color-card {
+    background: var(--vv-white); border: 1px solid var(--vv-border); border-radius: var(--vv-radius-lg); overflow: hidden;
+    transition: transform var(--vv-duration) var(--vv-ease), box-shadow var(--vv-duration) var(--vv-ease);
+  }
+  .color-card:hover { transform: translateY(-2px); box-shadow: var(--vv-shadow-sm); }
+  .color-swatch { height: 96px; display: flex; align-items: flex-end; justify-content: flex-end; padding: 8px; border-bottom: 1px solid var(--vv-border); }
+  .aa {
+    font-family: var(--vv-font-mono); font-size: 11px; font-weight: 500;
+    padding: 2px 6px; border-radius: var(--vv-radius-sm); background: rgba(255,255,255,0.9); color: var(--vv-navy);
+  }
+  .color-info { padding: var(--vv-space-3) var(--vv-space-4) var(--vv-space-4); display: grid; gap: 2px; }
+  .color-name { font-size: var(--vv-text-sm); font-weight: 600; color: var(--vv-navy); }
+  .color-token { font-family: var(--vv-font-mono); font-size: 11px; color: var(--vv-coral-deep); }
+  .color-value { font-family: var(--vv-font-mono); font-size: var(--vv-text-xs); color: var(--vv-text-muted); }
+  .color-use { font-size: var(--vv-text-xs); color: var(--vv-text-muted); margin-top: 4px; }
+
+  .adjust {
+    margin-top: var(--vv-space-8); background: var(--vv-white);
+    border: 1px solid var(--vv-border); border-radius: var(--vv-radius-lg); padding: var(--vv-space-6);
+  }
+  .adjust h3 { font-size: var(--vv-text-lg); font-weight: 600; margin-bottom: var(--vv-space-4); }
+  .adjust-row {
+    display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: var(--vv-space-4);
+    padding: var(--vv-space-4) 0; border-top: 1px solid var(--vv-border); align-items: start;
+  }
+  .adjust-row:first-of-type { border-top: 0; padding-top: 0; }
+  .pair { display: flex; align-items: center; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 84px; height: 32px;
+    padding: 0 10px; border-radius: var(--vv-radius-sm); font-size: 12px; font-weight: 600;
+  }
+  .pair .arrow { color: var(--vv-text-muted); font-size: 14px; }
+  .adjust-row p { font-size: var(--vv-text-sm); color: var(--vv-text-muted); }
+  .adjust-row p b { color: var(--vv-navy); font-weight: 600; }
+  .ratio { font-family: var(--vv-font-mono); font-size: 12px; white-space: nowrap; }
+  .ratio.bad { color: var(--vv-error); } .ratio.ok { color: var(--vv-success); }
+
+  /* ===== TIPOGRAFIA ===== */
+  .type-sample {
+    display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: var(--vv-space-8); align-items: baseline;
+    padding: var(--vv-space-6) 0; border-bottom: 1px solid var(--vv-border);
+  }
+  .type-sample:last-of-type { border-bottom: 0; }
+  .type-meta { font-family: var(--vv-font-mono); font-size: var(--vv-text-xs); color: var(--vv-text-muted); line-height: 1.7; }
+  .type-meta b { color: var(--vv-coral-deep); font-weight: 500; }
+  .type-preview { color: var(--vv-navy); min-width: 0; overflow-wrap: anywhere; }
+
+  /* ===== ESPAÇAMENTO ===== */
+  .spacing-row {
+    display: grid; grid-template-columns: 130px minmax(0, 1fr) 60px; gap: var(--vv-space-4); align-items: center;
+    padding: var(--vv-space-2) 0;
+  }
+  .spacing-label { font-family: var(--vv-font-mono); font-size: var(--vv-text-xs); color: var(--vv-navy); }
+  .spacing-bar { height: 20px; border-radius: 4px; background: var(--vv-coral); max-width: 100%; }
+  .spacing-px { font-family: var(--vv-font-mono); font-size: var(--vv-text-xs); color: var(--vv-text-muted); text-align: right; }
+  .spacing-use { font-size: var(--vv-text-xs); color: var(--vv-text-muted); grid-column: 2 / 4; margin-top: -4px; }
+
+  /* ===== BORDAS ===== */
+  .radius-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--vv-space-4); }
+  .radius-item {
+    aspect-ratio: 1.2; max-width: 100%;
+    background: var(--vv-white); border: 2px solid var(--vv-navy);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center;
+  }
+  .radius-item .val { font-family: var(--vv-font-mono); font-size: var(--vv-text-sm); color: var(--vv-navy); font-weight: 500; }
+  .radius-item .name { font-size: var(--vv-text-xs); color: var(--vv-text-muted); }
+
+  /* ===== SOMBRAS ===== */
+  .shadow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--vv-space-8); padding: var(--vv-space-4) 0; }
+  .shadow-card {
+    height: 120px; background: var(--vv-white); border-radius: var(--vv-radius-lg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  }
+  .shadow-card span { font-family: var(--vv-font-mono); font-size: var(--vv-text-xs); color: var(--vv-navy); }
+  .shadow-card small { font-size: 11px; color: var(--vv-text-muted); }
+
+  /* ===== COMPONENTES ===== */
+  .demo {
+    background: var(--vv-white); border: 1px solid var(--vv-border); border-radius: var(--vv-radius-lg);
+    padding: var(--vv-space-8); display: flex; flex-wrap: wrap; gap: var(--vv-space-4); align-items: center;
+  }
+  .demo.dark { background: var(--vv-navy); border-color: var(--vv-navy); }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 48px; padding: 0 24px;
+    font-family: var(--vv-font); font-size: var(--vv-text-md); font-weight: 600; letter-spacing: -0.01em;
+    border-radius: var(--vv-radius-md); border: 1.5px solid transparent;
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+    transition: background var(--vv-duration) var(--vv-ease), transform var(--vv-duration) var(--vv-ease),
+                box-shadow var(--vv-duration) var(--vv-ease), color var(--vv-duration) var(--vv-ease), border-color var(--vv-duration) var(--vv-ease);
+  }
+  .btn:focus-visible { box-shadow: var(--vv-focus-ring); border-radius: var(--vv-radius-md); }
+  .btn svg { width: 18px; height: 18px; flex: none; }
+  .btn-primary { background: var(--vv-coral-strong); color: var(--vv-white); box-shadow: var(--vv-shadow-cta); }
+  .btn-primary:hover { background: var(--vv-coral-deep); transform: translateY(-2px); }
+  .btn-primary:active { transform: translateY(0); box-shadow: none; }
+  .btn-secondary { background: var(--vv-navy); color: var(--vv-white); }
+  .btn-secondary:hover { background: var(--vv-navy-700); }
+  .btn-outline { background: transparent; color: var(--vv-navy); border-color: var(--vv-navy); }
+  .btn-outline:hover { background: var(--vv-navy); color: var(--vv-white); }
+  .btn-link { background: none; color: var(--vv-coral-strong); padding: 0 4px; min-height: 44px; }
+  .btn-link:hover { color: var(--vv-coral-deep); }
+  .btn-link:hover svg { transform: translateX(3px); }
+  .btn-link svg { transition: transform var(--vv-duration) var(--vv-ease); }
+  .btn-sm { min-height: 40px; padding: 0 16px; font-size: var(--vv-text-sm); }
+  .btn-on-dark { background: var(--vv-white); color: var(--vv-navy); }
+  .btn-on-dark:hover { background: var(--vv-coral-100); }
+  .btn-outline-dark { background: transparent; color: var(--vv-white); border-color: rgba(255, 255, 255, 0.5); }
+  .btn-outline-dark:hover { border-color: var(--vv-coral-bright); color: var(--vv-coral-bright); }
+  .btn[disabled] { background: var(--vv-navy-100); color: var(--vv-text-muted); box-shadow: none; cursor: not-allowed; transform: none; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px;
+    border-radius: var(--vv-radius-full); font-size: var(--vv-text-xs); font-weight: 600;
+  }
+  .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .badge-brand   { background: var(--vv-coral-100);  color: var(--vv-coral-deep); }
+  .badge-success { background: var(--vv-success-bg); color: var(--vv-success); }
+  .badge-warning { background: var(--vv-warning-bg); color: var(--vv-warning); }
+  .badge-error   { background: var(--vv-error-bg);   color: var(--vv-error); }
+  .badge-info    { background: var(--vv-info-bg);    color: var(--vv-info); }
+  .badge-neutral { background: var(--vv-navy-50);    color: var(--vv-text-muted); border: 1px solid var(--vv-border); }
+
+  .card-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--vv-space-4); }
+  .card {
+    background: var(--vv-white); border: 1px solid var(--vv-border); border-radius: var(--vv-radius-lg);
+    padding: var(--vv-space-6); display: grid; gap: var(--vv-space-3); align-content: start;
+    transition: box-shadow var(--vv-duration) var(--vv-ease), transform var(--vv-duration) var(--vv-ease), border-color var(--vv-duration) var(--vv-ease);
+  }
+  .card:hover { box-shadow: var(--vv-shadow-md); transform: translateY(-3px); border-color: var(--vv-border-strong); }
+  .card-icon {
+    width: 48px; height: 48px; border-radius: var(--vv-radius-md); background: var(--vv-coral-100); color: var(--vv-coral-strong);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-icon svg { width: 24px; height: 24px; }
+  .card h4 { font-size: var(--vv-text-lg); font-weight: 600; letter-spacing: -0.02em; }
+  .card p { font-size: var(--vv-text-sm); color: var(--vv-text-muted); }
+
+  .vitrine-card { padding: 0; overflow: hidden; gap: 0; }
+  .vitrine-card .shop { position: relative; background: var(--vv-navy-50); height: 150px; }
+  .vitrine-card .shop svg.toldo { position: absolute; top: 0; left: 0; width: 100%; height: 26px; }
+  .vitrine-card .shop .mock {
+    position: absolute; left: 20px; right: 20px; bottom: 0; top: 40px;
+    background: var(--vv-white); border: 1px solid var(--vv-border); border-bottom: 0;
+    border-radius: var(--vv-radius-md) var(--vv-radius-md) 0 0; padding: 12px; display: grid; gap: 6px; align-content: start;
+  }
+  .mock i { display: block; height: 8px; border-radius: 4px; background: var(--vv-navy-100); }
+  .mock i.c { width: 40%; background: var(--vv-coral); height: 14px; border-radius: 6px; margin-top: 4px; }
+  .vitrine-card .body { padding: var(--vv-space-6); display: grid; gap: var(--vv-space-2); }
+  .vitrine-card .meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: var(--vv-space-2); }
+
+  .plan-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--vv-space-4); max-width: 760px; }
+  .plan {
+    background: var(--vv-white); border: 1px solid var(--vv-border); border-radius: var(--vv-radius-xl);
+    padding: var(--vv-space-8); display: grid; gap: var(--vv-space-4); align-content: start;
+  }
+  .plan.featured { border: 2px solid var(--vv-coral); box-shadow: var(--vv-shadow-md); }
+  .plan-name { font-size: var(--vv-text-lg); font-weight: 600; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .plan-price { font-size: var(--vv-text-4xl); font-weight: 700; letter-spacing: var(--vv-tracking-heading); line-height: 1; }
+  .plan-price small { font-size: var(--vv-text-sm); font-weight: 500; color: var(--vv-text-muted); letter-spacing: 0; }
+  .plan ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--vv-space-2); font-size: var(--vv-text-sm); color: var(--vv-text-muted); }
+  .plan li { display: flex; gap: 8px; align-items: flex-start; }
+  .plan li svg { width: 18px; height: 18px; flex: none; color: var(--vv-success); margin-top: 2px; }
+
+  .form-demo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--vv-space-6); max-width: 760px; }
+  .field { display: grid; gap: 6px; }
+  .field label { font-size: var(--vv-text-sm); font-weight: 600; color: var(--vv-navy); }
+  .field input {
+    font-family: var(--vv-font); font-size: var(--vv-text-md); color: var(--vv-navy);
+    height: 48px; padding: 0 14px; border-radius: var(--vv-radius-md);
+    border: 1.5px solid var(--vv-border-strong); background: var(--vv-white);
+    transition: border-color var(--vv-duration) var(--vv-ease), box-shadow var(--vv-duration) var(--vv-ease);
+  }
+  .field input::placeholder { color: #7A8194; }
+  .field input:hover { border-color: var(--vv-navy-300); }
+  .field input:focus { outline: none; border-color: var(--vv-coral); box-shadow: var(--vv-focus-ring); }
+  .field .help { font-size: var(--vv-text-xs); color: var(--vv-text-muted); }
+  .field.error input { border-color: var(--vv-error); }
+  .field.error .help { color: var(--vv-error); font-weight: 500; }
+
+  .divider-demo { background: var(--vv-white); border: 1px solid var(--vv-border); border-radius: var(--vv-radius-lg); overflow: hidden; }
+  .divider-demo .top { height: 72px; background: var(--vv-white); }
+  .divider-demo svg { display: block; width: 100%; height: 36px; }
+  .divider-demo .bottom { background: var(--vv-navy); color: var(--vv-navy-300); padding: var(--vv-space-6); font-size: var(--vv-text-sm); }
+
+  /* ===== CODE ===== */
+  .code-block { margin-top: var(--vv-space-8); border-radius: var(--vv-radius-lg); overflow: hidden; background: var(--vv-code-bg); }
+  .code-header {
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    padding: 8px 8px 8px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .code-lang { font-family: var(--vv-font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--vv-code-comment); }
+  .copy-btn {
+    font-family: var(--vv-font); font-size: var(--vv-text-xs); font-weight: 600;
+    min-height: 36px; padding: 0 14px; border-radius: var(--vv-radius-sm);
+    background: rgba(255, 255, 255, 0.08); color: var(--vv-white); border: 1px solid rgba(255, 255, 255, 0.14);
+    cursor: pointer; transition: background var(--vv-duration) var(--vv-ease);
+  }
+  .copy-btn:hover { background: rgba(255, 255, 255, 0.16); }
+  .copy-btn.copied { background: var(--vv-coral-strong); border-color: var(--vv-coral-strong); }
+  .code-block pre {
+    margin: 0; padding: var(--vv-space-6); overflow-x: auto;
+    font-family: var(--vv-font-mono); font-size: 13px; line-height: 1.7; color: var(--vv-code-text);
+  }
+  .prop { color: var(--vv-code-prop); }
+  .val { color: var(--vv-code-text); }
+  .comment { color: var(--vv-code-comment); }
+
+  /* ===== QUICK START ===== */
+  .steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--vv-space-4); counter-reset: step; }
+  .step {
+    background: var(--vv-white); border: 1px solid var(--vv-border); border-radius: var(--vv-radius-lg);
+    padding: var(--vv-space-6); display: grid; gap: var(--vv-space-2); align-content: start;
+  }
+  .step-num {
+    width: 36px; height: 36px; border-radius: var(--vv-radius-md); background: var(--vv-navy); color: var(--vv-white);
+    font-family: var(--vv-font-mono); font-size: var(--vv-text-sm); display: flex; align-items: center; justify-content: center;
+    margin-bottom: var(--vv-space-2);
+  }
+  .step h4 { font-size: var(--vv-text-lg); font-weight: 600; }
+  .step p { font-size: var(--vv-text-sm); color: var(--vv-text-muted); }
+  .step code { font-family: var(--vv-font-mono); font-size: 12px; background: var(--vv-navy-50); color: var(--vv-coral-deep); padding: 1px 6px; border-radius: 4px; overflow-wrap: anywhere; }
+
+  .footer { background: var(--vv-navy-950); color: var(--vv-navy-300); font-size: var(--vv-text-sm); }
+  .footer .wrap { padding-block: var(--vv-space-8); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--vv-space-4); }
+
+  /* ===== RESPONSIVO ===== */
+  @media (max-width: 1100px) {
+    .logo-grid, .card-grid, .rules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 960px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+  }
+  @media (max-width: 720px) {
+    .top-nav nav { display: none; }
+    .top-nav { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+    .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+    .section > .wrap { padding-block: var(--vv-space-12); }
+    .section-title { font-size: var(--vv-text-3xl); }
+    .logo-grid, .card-grid, .rules, .plan-grid, .form-demo, .steps { grid-template-columns: minmax(0, 1fr); }
+    .type-sample { grid-template-columns: minmax(0, 1fr); gap: var(--vv-space-2); }
+    .adjust-row { grid-template-columns: minmax(0, 1fr); }
+    .spacing-row { grid-template-columns: 100px minmax(0, 1fr) 48px; }
+    .demo { padding: var(--vv-space-6) var(--vv-space-4); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Símbolo (Refino B): reutilizado via <use> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="vv-icon" viewBox="0 0 100 100">
+      <rect x="8" y="22" width="84" height="70" rx="12" fill="var(--icon-body, #16213E)"></rect>
+      <path d="M8 20 Q8 10 18 10 H82 Q92 10 92 20 V28 Q81.5 38 71 28 Q60.5 38 50 28 Q39.5 38 29 28 Q18.5 38 8 28 Z" fill="var(--icon-awning, #E8461F)"></path>
+      <path d="M46 52 L46 82 L54 74 L60 86 L66 83 L60 71 L71 71 Z" fill="var(--icon-cursor, #FFFFFF)" stroke="var(--icon-cursor, #FFFFFF)" stroke-width="2.5" stroke-linejoin="round"></path>
+      <path d="M40 46 L36 42 M46 45 V40 M38 52 H33" stroke="var(--icon-spark, #E8461F)" stroke-width="4" stroke-linecap="round"></path>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></symbol>
+    <symbol id="i-whats" viewBox="0 0 24 24"><path d="M4 20l1.3-4A8 8 0 1 1 8.2 19z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path><path d="M9 9.5c.3 2 1.8 3.8 4 4.6l1.2-1.1 1.8.8c-.2 1.2-1.1 1.8-2.2 1.7-3-.4-5.6-3-5.9-5.9-.1-1.1.5-2 1.7-2.2l.8 1.8z" fill="currentColor"></path></symbol>
+    <symbol id="i-cursor" viewBox="0 0 24 24"><path d="M6 4v14l4-4 3 6 2.5-1.2-3-6H18z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M11 17.5h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"></circle><path d="M16 16l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></symbol>
+  </defs>
+</svg>
+
+<!-- TOP NAV -->
+<header class="top-nav">
+  <a class="brand" href="#marca" aria-label="Vitrine Viva, voltar ao início">
+    <svg width="32" height="32" aria-hidden="true"><use href="#vv-icon"></use></svg>
+    <span class="wordmark"><span class="w1">vitrine</span><span class="w2">viva</span></span>
+  </a>
+  <nav aria-label="Atalhos">
+    <a href="#cores">Cores</a>
+    <a href="#tipografia">Tipografia</a>
+    <a href="#componentes">Componentes</a>
+    <a href="#tokens">Tokens</a>
+  </nav>
+  <a class="btn btn-primary btn-sm" href="#tokens">Copiar tokens</a>
+</header>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" aria-label="Módulos do design system">
+  <div class="sidebar-label">Módulos</div>
+  <a href="#marca" class="active"><span class="num">01</span> Marca</a>
+  <a href="#cores"><span class="num">02</span> Cores</a>
+  <a href="#tipografia"><span class="num">03</span> Tipografia</a>
+  <a href="#espacamento"><span class="num">04</span> Espaçamento</a>
+  <a href="#bordas"><span class="num">05</span> Bordas</a>
+  <a href="#sombras"><span class="num">06</span> Sombras</a>
+  <a href="#componentes"><span class="num">07</span> Componentes</a>
+  <a href="#tokens"><span class="num">08</span> Design Tokens</a>
+  <a href="#como-usar"><span class="num">09</span> Como usar</a>
+  <div class="sidebar-foot">Uso interno · v1.0 · novembro de 2026</div>
+</aside>
+
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <svg class="awning" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 0 H1200 V18 Q1175 40 1150 18 Q1125 40 1100 18 Q1075 40 1050 18 Q1025 40 1000 18 Q975 40 950 18 Q925 40 900 18 Q875 40 850 18 Q825 40 800 18 Q775 40 750 18 Q725 40 700 18 Q675 40 650 18 Q625 40 600 18 Q575 40 550 18 Q525 40 500 18 Q475 40 450 18 Q425 40 400 18 Q375 40 350 18 Q325 40 300 18 Q275 40 250 18 Q225 40 200 18 Q175 40 150 18 Q125 40 100 18 Q75 40 50 18 Q25 40 0 18 Z" fill="#E8461F"></path>
+    </svg>
+    <div class="wrap">
+      <div class="hero-badge">Design system interno · v1.0</div>
+      <h1 id="hero-title">vitrine<b>viva</b><br>em todos os detalhes.</h1>
+      <p>As cores, fontes, medidas e componentes que todo site da Vitrine Viva usa. A paleta vem do logo e foi ajustada para passar no contraste de acessibilidade (WCAG AA) em botões e textos pequenos.</p>
+      <div class="hero-meta">
+        <div><span>Fonte</span><strong>Sora</strong></div>
+        <div><span>Cor da marca</span><strong>Coral #E8461F</strong></div>
+        <div><span>Base</span><strong>Marinho #16213E</strong></div>
+        <div><span>Grade</span><strong>4 px</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 MARCA -->
+  <section class="section" id="marca">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="section-number">01 / MARCA</div>
+        <h2 class="section-title">Logo e símbolo</h2>
+        <p class="section-desc">O símbolo é uma vitrine de loja com toldo coral e um cursor clicando: a loja que responde. O nome junta "vitrine" em peso 500 e "viva" em peso 700, sempre em minúsculas e sem espaço.</p>
+      </div>
+
+      <div class="logo-grid">
+        <div class="logo-tile">
+          <div class="logo-stage on-light">
+            <svg width="56" height="56" aria-hidden="true"><use href="#vv-icon"></use></svg>
+            <span class="wm"><span class="w1">vitrine</span><span class="w2">viva</span></span>
+          </div>
+          <div class="logo-cap"><b>Principal</b> · fundos claros</div>
+        </div>
+        <div class="logo-tile">
+          <div class="logo-stage on-navy" style="--icon-body:#FFFFFF; --icon-cursor:#16213E; --icon-spark:#FF6A45">
+            <svg width="56" height="56" aria-hidden="true"><use href="#vv-icon"></use></svg>
+            <span class="wm"><span class="w1">vitrine</span><span class="w2">viva</span></span>
+          </div>
+          <div class="logo-cap"><b>Negativo</b> · fundo marinho</div>
+        </div>
+        <div class="logo-tile">
+          <div class="logo-stage on-coral" style="--icon-body:#16213E; --icon-awning:#FFFFFF; --icon-spark:#FFFFFF">
+            <svg width="56" height="56" aria-hidden="true"><use href="#vv-icon"></use></svg>
+            <span class="wm"><span class="w1">vitrine</span><span class="w2">viva</span></span>
+          </div>
+          <div class="logo-cap"><b>Sobre coral</b> · tudo branco no nome</div>
+        </div>
+      </div>
+
+      <div class="rules">
+        <div class="rule">
+          <div class="sizes">
+            <svg width="64" height="64" aria-hidden="true"><use href="#vv-icon"></use></svg>
+            <svg width="40" height="40" aria-hidden="true"><use href="#vv-icon"></use></svg>
+            <svg width="24" height="24" aria-hidden="true"><use href="#vv-icon"></use></svg>
+          </div>
+          <h4>Tamanho mínimo</h4>
+          <p>Símbolo sozinho a partir de 24 px (favicon). Logo completo a partir de 120 px de largura.</p>
+        </div>
+        <div class="rule">
+          <h4>Área de respiro</h4>
+          <p>Deixe em volta do logo, no mínimo, a altura do toldo (cerca de 20% do símbolo). Nada de texto ou borda dentro dessa margem.</p>
+        </div>
+        <div class="rule">
+          <h4>O que não fazer</h4>
+          <p>Não troque o coral por outra cor, não aplique sombra nem gradiente, não use o nome em maiúsculas e não estique o símbolo.</p>
+        </div>
+      </div>
+      <p class="note">Versão do símbolo usada aqui: "Refino B · Ícone sólido", do canvas de logo. Ela é a mais legível em tamanhos pequenos.</p>
+    </div>
+  </section>
+
+  <!-- 02 CORES -->
+  <section class="section" id="cores">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="section-number">02 / CORES</div>
+        <h2 class="section-title">Paleta</h2>
+        <p class="section-desc">Duas cores de marca (marinho e coral), neutros puxados para o azul e quatro cores de status. O número no canto de cada amostra é o contraste com texto branco ou marinho; 4,5 ou mais passa em texto pequeno.</p>
+      </div>
+
+      <div class="accent-strip" aria-label="Escala do coral">
+        <div style="background:#FDECE6"><span style="color:#A3311A">coral-100</span></div>
+        <div style="background:#FF6A45"><span style="color:#16213E">coral-bright</span></div>
+        <div style="background:#E8461F"><span style="color:#FFFFFF">coral</span></div>
+        <div style="background:#C2391A"><span style="color:#FFFFFF">coral-strong</span></div>
+        <div style="background:#A3311A"><span style="color:#FFFFFF">coral-deep</span></div>
+      </div>
+
+      <h3 class="sub-title">Marca</h3>
+      <div class="color-grid">
+        <div class="color-card"><div class="color-swatch" style="background:#E8461F"><span class="aa">3,9 branco</span></div><div class="color-info"><div class="color-name">Coral</div><div class="color-token">--vv-coral</div><div class="color-value">#E8461F</div><div class="color-use">Logo, ícones, títulos de 24 px para cima, detalhes.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#C2391A"><span class="aa">5,4 branco</span></div><div class="color-info"><div class="color-name">Coral forte</div><div class="color-token">--vv-coral-strong</div><div class="color-value">#C2391A</div><div class="color-use">Botão principal, links e texto coral pequeno.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#A3311A"><span class="aa">7,0 branco</span></div><div class="color-info"><div class="color-name">Coral profundo</div><div class="color-token">--vv-coral-deep</div><div class="color-value">#A3311A</div><div class="color-use">Hover do botão, texto sobre coral-100.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#FF6A45"><span class="aa">5,6 marinho</span></div><div class="color-info"><div class="color-name">Coral vivo</div><div class="color-token">--vv-coral-bright</div><div class="color-value">#FF6A45</div><div class="color-use">Coral sobre fundo marinho (texto e destaques).</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#FDECE6"></div><div class="color-info"><div class="color-name">Coral 100</div><div class="color-token">--vv-coral-100</div><div class="color-value">#FDECE6</div><div class="color-use">Fundo de selos, ícones e item ativo.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#16213E"><span class="aa">15,9 branco</span></div><div class="color-info"><div class="color-name">Marinho</div><div class="color-token">--vv-navy</div><div class="color-value">#16213E</div><div class="color-use">Texto principal, botão secundário, seções escuras.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#243258"><span class="aa">12,6 branco</span></div><div class="color-info"><div class="color-name">Marinho 700</div><div class="color-token">--vv-navy-700</div><div class="color-value">#243258</div><div class="color-use">Hover em fundos marinhos, cards escuros.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#0E1629"><span class="aa">18,0 branco</span></div><div class="color-info"><div class="color-name">Marinho 950</div><div class="color-token">--vv-navy-950</div><div class="color-value">#0E1629</div><div class="color-use">Rodapé e blocos de código.</div></div></div>
+      </div>
+
+      <h3 class="sub-title">Neutros</h3>
+      <div class="color-grid">
+        <div class="color-card"><div class="color-swatch" style="background:#FFFFFF"></div><div class="color-info"><div class="color-name">Branco</div><div class="color-token">--vv-white</div><div class="color-value">#FFFFFF</div><div class="color-use">Cards, campos e seções claras.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#F4F5F7"></div><div class="color-info"><div class="color-name">Fundo</div><div class="color-token">--vv-bg</div><div class="color-value">#F4F5F7</div><div class="color-use">Fundo da página e seções alternadas.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#E3E6EC"></div><div class="color-info"><div class="color-name">Borda</div><div class="color-token">--vv-border</div><div class="color-value">#E3E6EC</div><div class="color-use">Divisórias e contorno de cards.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#C9CED9"></div><div class="color-info"><div class="color-name">Borda forte</div><div class="color-token">--vv-border-strong</div><div class="color-value">#C9CED9</div><div class="color-use">Contorno de campos de formulário.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#555C70"><span class="aa">6,7 branco</span></div><div class="color-info"><div class="color-name">Texto secundário</div><div class="color-token">--vv-text-muted</div><div class="color-value">#555C70</div><div class="color-use">Descrições, legendas e ajuda.</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#A3ABBD"><span class="aa">6,9 marinho</span></div><div class="color-info"><div class="color-name">Marinho 300</div><div class="color-token">--vv-navy-300</div><div class="color-value">#A3ABBD</div><div class="color-use">Texto secundário sobre fundo marinho.</div></div></div>
+      </div>
+
+      <h3 class="sub-title">Status</h3>
+      <div class="color-grid">
+        <div class="color-card"><div class="color-swatch" style="background:#0B7A5C"><span class="aa">5,3 branco</span></div><div class="color-info"><div class="color-name">Sucesso</div><div class="color-token">--vv-success</div><div class="color-value">#0B7A5C · fundo #E6F4EF</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#8A5A0F"><span class="aa">5,9 branco</span></div><div class="color-info"><div class="color-name">Atenção</div><div class="color-token">--vv-warning</div><div class="color-value">#8A5A0F · fundo #FBF1DD</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#C21F4E"><span class="aa">5,8 branco</span></div><div class="color-info"><div class="color-name">Erro</div><div class="color-token">--vv-error</div><div class="color-value">#C21F4E · fundo #FBE6EC</div></div></div>
+        <div class="color-card"><div class="color-swatch" style="background:#2E62D9"><span class="aa">5,4 branco</span></div><div class="color-info"><div class="color-name">Informação</div><div class="color-token">--vv-info</div><div class="color-value">#2E62D9 · fundo #E7EEFC</div></div></div>
+      </div>
+
+      <div class="adjust">
+        <h3>O que foi ajustado na paleta original</h3>
+        <div class="adjust-row">
+          <div class="pair"><span class="chip" style="background:#E8461F;color:#fff">Botão</span><span class="arrow" aria-hidden="true">→</span><span class="chip" style="background:#C2391A;color:#fff">Botão</span></div>
+          <p><b>Botões coral ganharam um tom mais fechado.</b> Texto branco sobre o coral do logo dá <span class="ratio bad">3,94:1</span> e não passa no mínimo de 4,5:1. O coral forte dá <span class="ratio ok">5,39:1</span> e continua parecendo o mesmo coral. O #E8461F segue no logo, ícones e títulos grandes.</p>
+        </div>
+        <div class="adjust-row">
+          <div class="pair"><span class="chip" style="background:#16213E;color:#E8461F">viva</span><span class="arrow" aria-hidden="true">→</span><span class="chip" style="background:#16213E;color:#FF6A45">viva</span></div>
+          <p><b>Coral sobre marinho ficou mais claro.</b> O coral original no fundo marinho dá <span class="ratio bad">4,03:1</span>; o coral vivo #FF6A45 dá <span class="ratio ok">5,60:1</span> e fica legível em textos pequenos e no logo negativo.</p>
+        </div>
+        <div class="adjust-row">
+          <div class="pair"><span class="chip" style="background:#E8461F;color:#fff">Erro?</span><span class="arrow" aria-hidden="true">→</span><span class="chip" style="background:#C21F4E;color:#fff">Erro</span></div>
+          <p><b>Erro virou framboesa, não vermelho.</b> Um vermelho comum ficaria parecido demais com o coral da marca, e o visitante confundiria aviso de erro com destaque. O #C21F4E se diferencia pela cor e pela luminosidade.</p>
+        </div>
+        <div class="adjust-row">
+          <div class="pair"><span class="chip" style="background:#0F8A6A;color:#fff">Ok</span><span class="arrow" aria-hidden="true">→</span><span class="chip" style="background:#0B7A5C;color:#fff">Ok</span></div>
+          <p><b>O verde das opções do logo foi escurecido</b> de #0F8A6A (<span class="ratio bad">4,32:1</span>) para #0B7A5C (<span class="ratio ok">5,31:1</span>) e virou a cor de sucesso. O marinho, o fundo #F4F5F7, a borda #E3E6EC e o texto secundário #555C70 já passavam e ficaram iguais.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">CSS · cores</span><button class="copy-btn" type="button">Copiar</button></div>
+<pre><span class="comment">/* MARCA */</span>
+<span class="prop">--vv-coral</span>: <span class="val">#E8461F</span>;        <span class="comment">/* logo, ícones, títulos grandes */</span>
+<span class="prop">--vv-coral-strong</span>: <span class="val">#C2391A</span>; <span class="comment">/* botões e links (AA) */</span>
+<span class="prop">--vv-coral-deep</span>: <span class="val">#A3311A</span>;   <span class="comment">/* hover */</span>
+<span class="prop">--vv-coral-bright</span>: <span class="val">#FF6A45</span>; <span class="comment">/* coral sobre marinho */</span>
+<span class="prop">--vv-coral-100</span>: <span class="val">#FDECE6</span>;
+<span class="prop">--vv-navy-950</span>: <span class="val">#0E1629</span>;
+<span class="prop">--vv-navy</span>: <span class="val">#16213E</span>;
+<span class="prop">--vv-navy-700</span>: <span class="val">#243258</span>;
+<span class="prop">--vv-navy-300</span>: <span class="val">#A3ABBD</span>;
+<span class="prop">--vv-navy-100</span>: <span class="val">#E3E6EC</span>;
+<span class="prop">--vv-navy-50</span>: <span class="val">#F4F5F7</span>;
+
+<span class="comment">/* TEXTO E SUPERFÍCIES */</span>
+<span class="prop">--vv-text</span>: <span class="val">#16213E</span>;
+<span class="prop">--vv-text-muted</span>: <span class="val">#555C70</span>;
+<span class="prop">--vv-bg</span>: <span class="val">#F4F5F7</span>;
+<span class="prop">--vv-surface</span>: <span class="val">#FFFFFF</span>;
+<span class="prop">--vv-border</span>: <span class="val">#E3E6EC</span>;
+<span class="prop">--vv-border-strong</span>: <span class="val">#C9CED9</span>;
+
+<span class="comment">/* STATUS */</span>
+<span class="prop">--vv-success</span>: <span class="val">#0B7A5C</span>; <span class="prop">--vv-success-bg</span>: <span class="val">#E6F4EF</span>;
+<span class="prop">--vv-warning</span>: <span class="val">#8A5A0F</span>; <span class="prop">--vv-warning-bg</span>: <span class="val">#FBF1DD</span>;
+<span class="prop">--vv-error</span>: <span class="val">#C21F4E</span>;   <span class="prop">--vv-error-bg</span>: <span class="val">#FBE6EC</span>;
+<span class="prop">--vv-info</span>: <span class="val">#2E62D9</span>;    <span class="prop">--vv-info-bg</span>: <span class="val">#E7EEFC</span>;</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 TIPOGRAFIA -->
+  <section class="section" id="tipografia">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="section-number">03 / TIPOGRAFIA</div>
+        <h2 class="section-title">Sora em tudo</h2>
+        <p class="section-desc">A mesma fonte do logo, do título ao rodapé. Títulos grandes usam espaçamento negativo entre letras, igual ao nome da marca. JetBrains Mono fica só para códigos e dados técnicos.</p>
+      </div>
+
+      <div class="type-sample"><div class="type-meta"><b>Display</b><br>72 px / 500 + 700<br>-0.045em</div><div class="type-preview" style="font-size:clamp(2.5rem,6vw,4.5rem);letter-spacing:-0.045em;line-height:1"><span style="font-weight:500">sua loja</span> <span style="font-weight:700;color:var(--vv-coral)">viva</span></div></div>
+      <div class="type-sample"><div class="type-meta"><b>H1</b><br>56 px / 600<br>-0.03em</div><div class="type-preview" style="font-size:clamp(2rem,5vw,3.5rem);font-weight:600;letter-spacing:-0.03em;line-height:1.05">Seu site vende enquanto você dorme</div></div>
+      <div class="type-sample"><div class="type-meta"><b>H2</b><br>40 px / 600<br>-0.03em</div><div class="type-preview" style="font-size:clamp(1.75rem,4vw,2.5rem);font-weight:600;letter-spacing:-0.03em;line-height:1.1">Como funciona</div></div>
+      <div class="type-sample"><div class="type-meta"><b>H3</b><br>24 px / 600<br>-0.02em</div><div class="type-preview" style="font-size:1.5rem;font-weight:600;letter-spacing:-0.02em;line-height:1.25">Catálogo que abre no celular em 2 segundos</div></div>
+      <div class="type-sample"><div class="type-meta"><b>Corpo grande</b><br>18 px / 400<br>altura 1.6</div><div class="type-preview" style="font-size:1.125rem;line-height:1.6;max-width:60ch">Montamos a vitrine online da sua loja com fotos, preços e botão de WhatsApp. O cliente vê o produto, toca e já fala com você.</div></div>
+      <div class="type-sample"><div class="type-meta"><b>Corpo</b><br>16 px / 400<br>altura 1.6</div><div class="type-preview" style="font-size:1rem;line-height:1.6;color:var(--vv-text-muted);max-width:60ch">Texto corrido nunca abaixo de 16 px. Linhas com até 65 caracteres para a leitura não cansar no computador.</div></div>
+      <div class="type-sample"><div class="type-meta"><b>Rótulo</b><br>12 px / 600<br>0.14em, maiúsculas</div><div class="type-preview" style="font-size:12px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--vv-coral-strong)">Novidade · Planos · Portfólio</div></div>
+      <div class="type-sample"><div class="type-meta"><b>Mono</b><br>13 px / 400<br>JetBrains Mono</div><div class="type-preview" style="font-family:var(--vv-font-mono);font-size:13px;color:var(--vv-text-muted)">--vv-coral-strong: #C2391A;</div></div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">HTML + CSS · fontes</span><button class="copy-btn" type="button">Copiar</button></div>
+<pre><span class="comment">&lt;!-- no &lt;head&gt; --&gt;</span>
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"&gt;
+
+<span class="comment">/* TIPOGRAFIA */</span>
+<span class="prop">--vv-font</span>: <span class="val">'Sora', ui-sans-serif, system-ui, sans-serif</span>;
+<span class="prop">--vv-font-mono</span>: <span class="val">'JetBrains Mono', ui-monospace, monospace</span>;
+<span class="prop">--vv-text-xs</span>: <span class="val">0.75rem</span>;  <span class="comment">/* 12 */</span>   <span class="prop">--vv-text-sm</span>: <span class="val">0.875rem</span>; <span class="comment">/* 14 */</span>
+<span class="prop">--vv-text-md</span>: <span class="val">1rem</span>;     <span class="comment">/* 16 */</span>   <span class="prop">--vv-text-lg</span>: <span class="val">1.125rem</span>; <span class="comment">/* 18 */</span>
+<span class="prop">--vv-text-xl</span>: <span class="val">1.25rem</span>;  <span class="comment">/* 20 */</span>   <span class="prop">--vv-text-2xl</span>: <span class="val">1.5rem</span>;  <span class="comment">/* 24 */</span>
+<span class="prop">--vv-text-3xl</span>: <span class="val">2rem</span>;    <span class="comment">/* 32 */</span>   <span class="prop">--vv-text-4xl</span>: <span class="val">2.5rem</span>;  <span class="comment">/* 40 */</span>
+<span class="prop">--vv-text-5xl</span>: <span class="val">3.5rem</span>;  <span class="comment">/* 56 */</span>   <span class="prop">--vv-text-6xl</span>: <span class="val">4.5rem</span>;  <span class="comment">/* 72 */</span>
+<span class="prop">--vv-tracking-display</span>: <span class="val">-0.045em</span>;
+<span class="prop">--vv-tracking-heading</span>: <span class="val">-0.03em</span>;
+<span class="prop">--vv-tracking-label</span>: <span class="val">0.14em</span>;</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 ESPAÇAMENTO -->
+  <section class="section" id="espacamento">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="section-number">04 / ESPAÇAMENTO</div>
+        <h2 class="section-title">Grade de 4 px</h2>
+        <p class="section-desc">Todo padding, margem e gap sai desta escala. Nada de valores soltos como 13 px ou 27 px.</p>
+      </div>
+
+      <div class="spacing-row"><div class="spacing-label">--vv-space-1</div><div class="spacing-bar" style="width:4px"></div><div class="spacing-px">4px</div></div>
+      <div class="spacing-row"><div class="spacing-label">--vv-space-2</div><div class="spacing-bar" style="width:8px"></div><div class="spacing-px">8px</div><div class="spacing-use">Ícone e texto dentro do botão</div></div>
+      <div class="spacing-row"><div class="spacing-label">--vv-space-3</div><div class="spacing-bar" style="width:12px"></div><div class="spacing-px">12px</div></div>
+      <div class="spacing-row"><div class="spacing-label">--vv-space-4</div><div class="spacing-bar" style="width:16px"></div><div class="spacing-px">16px</div><div class="spacing-use">Margem lateral no celular, espaço entre cards</div></div>
+      <div class="spacing-row"><div class="spacing-label">--vv-space-6</div><div class="spacing-bar" style="width:24px"></div><div class="spacing-px">24px</div><div class="spacing-use">Padding interno de cards</div></div>
+      <div class="spacing-row"><div class="spacing-label">--vv-space-8</div><div class="spacing-bar" style="width:32px"></div><div class="spacing-px">32px</div></div>
+      <div class="spacing-row"><div class="spacing-label">--vv-space-12</div><div class="spacing-bar" style="width:48px"></div><div class="spacing-px">48px</div><div class="spacing-use">Margem lateral no computador</div></div>
+      <div class="spacing-row"><div class="spacing-label">--vv-space-16</div><div class="spacing-bar" style="width:64px"></div><div class="spacing-px">64px</div><div class="spacing-use">Respiro entre seções no celular</div></div>
+      <div class="spacing-row"><div class="spacing-label">--vv-space-24</div><div class="spacing-bar" style="width:96px"></div><div class="spacing-px">96px</div><div class="spacing-use">Respiro entre seções no computador</div></div>
+      <div class="spacing-row"><div class="spacing-label">--vv-space-32</div><div class="spacing-bar" style="width:128px"></div><div class="spacing-px">128px</div></div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">CSS · espaçamento</span><button class="copy-btn" type="button">Copiar</button></div>
+<pre><span class="comment">/* ESPAÇAMENTO — base 4px */</span>
+<span class="prop">--vv-space-1</span>: <span class="val">4px</span>;    <span class="prop">--vv-space-2</span>: <span class="val">8px</span>;    <span class="prop">--vv-space-3</span>: <span class="val">12px</span>;
+<span class="prop">--vv-space-4</span>: <span class="val">16px</span>;   <span class="prop">--vv-space-6</span>: <span class="val">24px</span>;   <span class="prop">--vv-space-8</span>: <span class="val">32px</span>;
+<span class="prop">--vv-space-12</span>: <span class="val">48px</span>;  <span class="prop">--vv-space-16</span>: <span class="val">64px</span>;  <span class="prop">--vv-space-24</span>: <span class="val">96px</span>;
+<span class="prop">--vv-space-32</span>: <span class="val">128px</span>;</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 BORDAS -->
+  <section class="section" id="bordas">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="section-number">05 / BORDAS</div>
+        <h2 class="section-title">Cantos arredondados</h2>
+        <p class="section-desc">Cantos suaves como os do símbolo, sem virar pílula. Botões e campos usam 10 px, cards 16 px. Pílula só para selos.</p>
+      </div>
+
+      <div class="radius-grid">
+        <div class="radius-item" style="border-radius:6px"><span class="val">6px</span><span class="name">sm · chips, código</span></div>
+        <div class="radius-item" style="border-radius:10px"><span class="val">10px</span><span class="name">md · botões, campos</span></div>
+        <div class="radius-item" style="border-radius:16px"><span class="val">16px</span><span class="name">lg · cards</span></div>
+        <div class="radius-item" style="border-radius:24px"><span class="val">24px</span><span class="name">xl · planos, modais</span></div>
+        <div class="radius-item" style="border-radius:9999px"><span class="val">9999px</span><span class="name">full · selos</span></div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">CSS · bordas</span><button class="copy-btn" type="button">Copiar</button></div>
+<pre><span class="comment">/* BORDAS */</span>
+<span class="prop">--vv-radius-sm</span>: <span class="val">6px</span>;
+<span class="prop">--vv-radius-md</span>: <span class="val">10px</span>;
+<span class="prop">--vv-radius-lg</span>: <span class="val">16px</span>;
+<span class="prop">--vv-radius-xl</span>: <span class="val">24px</span>;
+<span class="prop">--vv-radius-full</span>: <span class="val">9999px</span>;</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 SOMBRAS -->
+  <section class="section" id="sombras">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="section-number">06 / SOMBRAS</div>
+        <h2 class="section-title">Profundidade</h2>
+        <p class="section-desc">Sombras suaves com tom marinho em vez de preto. A sombra coral é exclusiva do botão principal, e o anel de foco aparece em tudo que recebe teclado.</p>
+      </div>
+
+      <div class="shadow-grid">
+        <div class="shadow-card" style="box-shadow:var(--vv-shadow-xs)"><span>shadow-xs</span><small>campos, chips</small></div>
+        <div class="shadow-card" style="box-shadow:var(--vv-shadow-sm)"><span>shadow-sm</span><small>cards em repouso</small></div>
+        <div class="shadow-card" style="box-shadow:var(--vv-shadow-md)"><span>shadow-md</span><small>hover de card</small></div>
+        <div class="shadow-card" style="box-shadow:var(--vv-shadow-lg)"><span>shadow-lg</span><small>modal, menu</small></div>
+        <div class="shadow-card" style="box-shadow:var(--vv-shadow-cta)"><span>shadow-cta</span><small>botão principal</small></div>
+        <div class="shadow-card" style="box-shadow:var(--vv-focus-ring)"><span>focus-ring</span><small>foco do teclado</small></div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">CSS · sombras</span><button class="copy-btn" type="button">Copiar</button></div>
+<pre><span class="comment">/* SOMBRAS — tom marinho */</span>
+<span class="prop">--vv-shadow-xs</span>: <span class="val">0 1px 2px rgba(22, 33, 62, 0.06)</span>;
+<span class="prop">--vv-shadow-sm</span>: <span class="val">0 2px 8px rgba(22, 33, 62, 0.08)</span>;
+<span class="prop">--vv-shadow-md</span>: <span class="val">0 8px 24px rgba(22, 33, 62, 0.10)</span>;
+<span class="prop">--vv-shadow-lg</span>: <span class="val">0 20px 48px rgba(22, 33, 62, 0.14)</span>;
+<span class="prop">--vv-shadow-cta</span>: <span class="val">0 8px 20px rgba(194, 57, 26, 0.28)</span>;
+<span class="prop">--vv-focus-ring</span>: <span class="val">0 0 0 3px rgba(232, 70, 31, 0.40)</span>;</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 COMPONENTES -->
+  <section class="section" id="componentes">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="section-number">07 / COMPONENTES</div>
+        <h2 class="section-title">Componentes</h2>
+        <p class="section-desc">Peças prontas para montar as páginas. Todos têm área de toque de pelo menos 44 px e foco visível no teclado.</p>
+      </div>
+
+      <h3 class="sub-title">Botões</h3>
+      <div class="demo">
+        <a class="btn btn-primary" href="#componentes"><svg aria-hidden="true"><use href="#i-whats"></use></svg>Quero minha vitrine</a>
+        <a class="btn btn-secondary" href="#componentes">Ver planos</a>
+        <a class="btn btn-outline" href="#componentes">Ver portfólio</a>
+        <a class="btn btn-link" href="#componentes">Como funciona <svg aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        <button class="btn btn-primary" type="button" disabled>Enviando…</button>
+      </div>
+      <div class="demo dark" style="margin-top:var(--vv-space-4)">
+        <a class="btn btn-on-dark" href="#componentes">Falar no WhatsApp</a>
+        <a class="btn btn-outline-dark" href="#componentes">Ver exemplos</a>
+        <a class="btn btn-primary btn-sm" href="#componentes">Botão pequeno</a>
+      </div>
+      <p class="note">Um único botão principal (coral) por tela. Os outros são marinho, contorno ou link.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">CSS · botões</span><button class="copy-btn" type="button">Copiar</button></div>
+<pre><span class="prop">.btn</span> {
+  <span class="val">display: inline-flex; align-items: center; justify-content: center; gap: 8px;</span>
+  <span class="val">min-height: 48px; padding: 0 24px;</span>
+  <span class="val">font: 600 var(--vv-text-md)/1 var(--vv-font); letter-spacing: -0.01em;</span>
+  <span class="val">border-radius: var(--vv-radius-md); border: 1.5px solid transparent;</span>
+  <span class="val">cursor: pointer; text-decoration: none;</span>
+  <span class="val">transition: background .2s, transform .2s, box-shadow .2s;</span>
+}
+<span class="prop">.btn:focus-visible</span> { <span class="val">outline: none; box-shadow: var(--vv-focus-ring);</span> }
+<span class="prop">.btn-primary</span> { <span class="val">background: var(--vv-coral-strong); color: #fff; box-shadow: var(--vv-shadow-cta);</span> }
+<span class="prop">.btn-primary:hover</span> { <span class="val">background: var(--vv-coral-deep); transform: translateY(-2px);</span> }
+<span class="prop">.btn-secondary</span> { <span class="val">background: var(--vv-navy); color: #fff;</span> }
+<span class="prop">.btn-secondary:hover</span> { <span class="val">background: var(--vv-navy-700);</span> }
+<span class="prop">.btn-outline</span> { <span class="val">background: transparent; color: var(--vv-navy); border-color: var(--vv-navy);</span> }
+<span class="prop">.btn-outline:hover</span> { <span class="val">background: var(--vv-navy); color: #fff;</span> }
+<span class="prop">.btn-link</span> { <span class="val">background: none; color: var(--vv-coral-strong); padding: 0 4px;</span> }
+<span class="prop">.btn-sm</span> { <span class="val">min-height: 40px; padding: 0 16px; font-size: var(--vv-text-sm);</span> }</pre>
+      </div>
+
+      <h3 class="sub-title">Selos de status</h3>
+      <div class="demo">
+        <span class="badge badge-brand">Novo</span>
+        <span class="badge badge-success">No ar</span>
+        <span class="badge badge-warning">Em revisão</span>
+        <span class="badge badge-error">Fora do ar</span>
+        <span class="badge badge-info">Em produção</span>
+        <span class="badge badge-neutral">Rascunho</span>
+      </div>
+
+      <h3 class="sub-title">Cards de serviço</h3>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#i-phone"></use></svg></div>
+          <h4>Feito para o celular</h4>
+          <p>Mais de 80% das visitas chegam pelo celular, então a página é desenhada primeiro para a tela pequena.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#i-cursor"></use></svg></div>
+          <h4>Interativa de verdade</h4>
+          <p>Produtos que giram, catálogo com filtro e botão que leva direto para a conversa no WhatsApp.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#i-search"></use></svg></div>
+          <h4>Encontrada no Google</h4>
+          <p>Título, descrição, mapa do site e Perfil da Empresa no Google configurados na entrega.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-title">Card de vitrine (portfólio)</h3>
+      <div class="card-grid">
+        <div class="card vitrine-card">
+          <div class="shop">
+            <svg class="toldo" viewBox="0 0 300 26" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 H300 V12 Q287.5 26 275 12 Q262.5 26 250 12 Q237.5 26 225 12 Q212.5 26 200 12 Q187.5 26 175 12 Q162.5 26 150 12 Q137.5 26 125 12 Q112.5 26 100 12 Q87.5 26 75 12 Q62.5 26 50 12 Q37.5 26 25 12 Q12.5 26 0 12 Z" fill="#E8461F"></path></svg>
+            <div class="mock"><i style="width:60%"></i><i style="width:85%"></i><i style="width:70%"></i><i class="c"></i></div>
+          </div>
+          <div class="body">
+            <span class="badge badge-success" style="justify-self:start">No ar</span>
+            <h4>[Nome do cliente]</h4>
+            <p>[Segmento · cidade]</p>
+            <div class="meta"><a class="btn btn-link" href="#componentes">Ver site <svg aria-hidden="true"><use href="#i-arrow"></use></svg></a></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">O toldo coral no topo do card repete o símbolo e identifica a marca nos projetos de portfólio.</p>
+
+      <h3 class="sub-title">Planos</h3>
+      <div class="plan-grid">
+        <div class="plan">
+          <div class="plan-name">[Plano essencial]</div>
+          <div class="plan-price">R$ [preço] <small>/mês</small></div>
+          <ul>
+            <li><svg aria-hidden="true"><use href="#i-check"></use></svg>[Benefício 1]</li>
+            <li><svg aria-hidden="true"><use href="#i-check"></use></svg>[Benefício 2]</li>
+            <li><svg aria-hidden="true"><use href="#i-check"></use></svg>[Benefício 3]</li>
+          </ul>
+          <a class="btn btn-outline" href="#componentes">Escolher este plano</a>
+        </div>
+        <div class="plan featured">
+          <div class="plan-name">[Plano completo] <span class="badge badge-brand">Mais escolhido</span></div>
+          <div class="plan-price">R$ [preço] <small>/mês</small></div>
+          <ul>
+            <li><svg aria-hidden="true"><use href="#i-check"></use></svg>[Benefício 1]</li>
+            <li><svg aria-hidden="true"><use href="#i-check"></use></svg>[Benefício 2]</li>
+            <li><svg aria-hidden="true"><use href="#i-check"></use></svg>[Benefício 3]</li>
+          </ul>
+          <a class="btn btn-primary" href="#componentes">Quero este plano</a>
+        </div>
+      </div>
+
+      <h3 class="sub-title">Formulário</h3>
+      <form class="form-demo" id="form-demo" novalidate>
+        <div class="field">
+          <label for="f-nome">Nome da loja</label>
+          <input id="f-nome" type="text" placeholder="Ex.: Ateliê Flor de Sal" autocomplete="organization">
+          <span class="help">Como seus clientes conhecem a loja.</span>
+        </div>
+        <div class="field error">
+          <label for="f-whats">WhatsApp</label>
+          <input id="f-whats" type="tel" value="(11) 9" aria-invalid="true" aria-describedby="f-whats-help" autocomplete="tel">
+          <span class="help" id="f-whats-help">Digite o número com DDD, por exemplo (11) 98765-4321.</span>
+        </div>
+      </form>
+
+      <h3 class="sub-title">Divisor de toldo</h3>
+      <div class="divider-demo">
+        <div class="top"></div>
+        <svg viewBox="0 0 1200 36" preserveAspectRatio="none" aria-hidden="true">
+          <rect width="1200" height="36" fill="#16213E"></rect>
+          <path d="M0 0 H1200 V14 Q1170 36 1140 14 Q1110 36 1080 14 Q1050 36 1020 14 Q990 36 960 14 Q930 36 900 14 Q870 36 840 14 Q810 36 780 14 Q750 36 720 14 Q690 36 660 14 Q630 36 600 14 Q570 36 540 14 Q510 36 480 14 Q450 36 420 14 Q390 36 360 14 Q330 36 300 14 Q270 36 240 14 Q210 36 180 14 Q150 36 120 14 Q90 36 60 14 Q30 36 0 14 Z" fill="#FFFFFF"></path>
+        </svg>
+        <div class="bottom">Use na passagem de uma seção clara para uma escura, no máximo uma vez por página.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 TOKENS -->
+  <section class="section" id="tokens">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="section-number">08 / TOKENS</div>
+        <h2 class="section-title">Design tokens</h2>
+        <p class="section-desc">Bloco completo para colar no início do CSS de qualquer site da Vitrine Viva.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">CSS · tokens completos</span><button class="copy-btn" type="button">Copiar</button></div>
+<pre>:root {
+  <span class="comment">/* ===== CORES — Marca ===== */</span>
+  <span class="prop">--vv-coral</span>: <span class="val">#E8461F</span>;
+  <span class="prop">--vv-coral-strong</span>: <span class="val">#C2391A</span>;
+  <span class="prop">--vv-coral-deep</span>: <span class="val">#A3311A</span>;
+  <span class="prop">--vv-coral-bright</span>: <span class="val">#FF6A45</span>;
+  <span class="prop">--vv-coral-100</span>: <span class="val">#FDECE6</span>;
+  <span class="prop">--vv-navy-950</span>: <span class="val">#0E1629</span>;
+  <span class="prop">--vv-navy</span>: <span class="val">#16213E</span>;
+  <span class="prop">--vv-navy-700</span>: <span class="val">#243258</span>;
+  <span class="prop">--vv-navy-300</span>: <span class="val">#A3ABBD</span>;
+  <span class="prop">--vv-navy-100</span>: <span class="val">#E3E6EC</span>;
+  <span class="prop">--vv-navy-50</span>: <span class="val">#F4F5F7</span>;
+
+  <span class="comment">/* ===== CORES — Texto e superfícies ===== */</span>
+  <span class="prop">--vv-white</span>: <span class="val">#FFFFFF</span>;
+  <span class="prop">--vv-text</span>: <span class="val">#16213E</span>;
+  <span class="prop">--vv-text-muted</span>: <span class="val">#555C70</span>;
+  <span class="prop">--vv-bg</span>: <span class="val">#F4F5F7</span>;
+  <span class="prop">--vv-surface</span>: <span class="val">#FFFFFF</span>;
+  <span class="prop">--vv-border</span>: <span class="val">#E3E6EC</span>;
+  <span class="prop">--vv-border-strong</span>: <span class="val">#C9CED9</span>;
+
+  <span class="comment">/* ===== CORES — Status ===== */</span>
+  <span class="prop">--vv-success</span>: <span class="val">#0B7A5C</span>;  <span class="prop">--vv-success-bg</span>: <span class="val">#E6F4EF</span>;
+  <span class="prop">--vv-warning</span>: <span class="val">#8A5A0F</span>;  <span class="prop">--vv-warning-bg</span>: <span class="val">#FBF1DD</span>;
+  <span class="prop">--vv-error</span>: <span class="val">#C21F4E</span>;    <span class="prop">--vv-error-bg</span>: <span class="val">#FBE6EC</span>;
+  <span class="prop">--vv-info</span>: <span class="val">#2E62D9</span>;     <span class="prop">--vv-info-bg</span>: <span class="val">#E7EEFC</span>;
+
+  <span class="comment">/* ===== TIPOGRAFIA ===== */</span>
+  <span class="prop">--vv-font</span>: <span class="val">'Sora', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif</span>;
+  <span class="prop">--vv-font-mono</span>: <span class="val">'JetBrains Mono', ui-monospace, Menlo, monospace</span>;
+  <span class="prop">--vv-text-xs</span>: <span class="val">0.75rem</span>;
+  <span class="prop">--vv-text-sm</span>: <span class="val">0.875rem</span>;
+  <span class="prop">--vv-text-md</span>: <span class="val">1rem</span>;
+  <span class="prop">--vv-text-lg</span>: <span class="val">1.125rem</span>;
+  <span class="prop">--vv-text-xl</span>: <span class="val">1.25rem</span>;
+  <span class="prop">--vv-text-2xl</span>: <span class="val">1.5rem</span>;
+  <span class="prop">--vv-text-3xl</span>: <span class="val">2rem</span>;
+  <span class="prop">--vv-text-4xl</span>: <span class="val">2.5rem</span>;
+  <span class="prop">--vv-text-5xl</span>: <span class="val">3.5rem</span>;
+  <span class="prop">--vv-text-6xl</span>: <span class="val">4.5rem</span>;
+  <span class="prop">--vv-tracking-display</span>: <span class="val">-0.045em</span>;
+  <span class="prop">--vv-tracking-heading</span>: <span class="val">-0.03em</span>;
+  <span class="prop">--vv-tracking-label</span>: <span class="val">0.14em</span>;
+
+  <span class="comment">/* ===== ESPAÇAMENTO — base 4px ===== */</span>
+  <span class="prop">--vv-space-1</span>: <span class="val">4px</span>;
+  <span class="prop">--vv-space-2</span>: <span class="val">8px</span>;
+  <span class="prop">--vv-space-3</span>: <span class="val">12px</span>;
+  <span class="prop">--vv-space-4</span>: <span class="val">16px</span>;
+  <span class="prop">--vv-space-6</span>: <span class="val">24px</span>;
+  <span class="prop">--vv-space-8</span>: <span class="val">32px</span>;
+  <span class="prop">--vv-space-12</span>: <span class="val">48px</span>;
+  <span class="prop">--vv-space-16</span>: <span class="val">64px</span>;
+  <span class="prop">--vv-space-24</span>: <span class="val">96px</span>;
+  <span class="prop">--vv-space-32</span>: <span class="val">128px</span>;
+
+  <span class="comment">/* ===== BORDAS ===== */</span>
+  <span class="prop">--vv-radius-sm</span>: <span class="val">6px</span>;
+  <span class="prop">--vv-radius-md</span>: <span class="val">10px</span>;
+  <span class="prop">--vv-radius-lg</span>: <span class="val">16px</span>;
+  <span class="prop">--vv-radius-xl</span>: <span class="val">24px</span>;
+  <span class="prop">--vv-radius-full</span>: <span class="val">9999px</span>;
+
+  <span class="comment">/* ===== SOMBRAS ===== */</span>
+  <span class="prop">--vv-shadow-xs</span>: <span class="val">0 1px 2px rgba(22, 33, 62, 0.06)</span>;
+  <span class="prop">--vv-shadow-sm</span>: <span class="val">0 2px 8px rgba(22, 33, 62, 0.08)</span>;
+  <span class="prop">--vv-shadow-md</span>: <span class="val">0 8px 24px rgba(22, 33, 62, 0.10)</span>;
+  <span class="prop">--vv-shadow-lg</span>: <span class="val">0 20px 48px rgba(22, 33, 62, 0.14)</span>;
+  <span class="prop">--vv-shadow-cta</span>: <span class="val">0 8px 20px rgba(194, 57, 26, 0.28)</span>;
+  <span class="prop">--vv-focus-ring</span>: <span class="val">0 0 0 3px rgba(232, 70, 31, 0.40)</span>;
+
+  <span class="comment">/* ===== MOVIMENTO ===== */</span>
+  <span class="prop">--vv-ease</span>: <span class="val">cubic-bezier(0.2, 0.7, 0.2, 1)</span>;
+  <span class="prop">--vv-duration</span>: <span class="val">200ms</span>;
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 COMO USAR -->
+  <section class="section" id="como-usar">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="section-number">09 / COMO USAR</div>
+        <h2 class="section-title">Como usar em um site novo</h2>
+        <p class="section-desc">Quatro passos, nesta ordem, para começar qualquer página da Vitrine Viva.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><h4>Cole os tokens</h4><p>Copie o bloco da seção Design Tokens para o topo do CSS do projeto, dentro de <code>:root</code>.</p></div>
+        <div class="step"><div class="step-num">2</div><h4>Carregue as fontes</h4><p>Adicione o link do Google Fonts da seção Tipografia no <code>&lt;head&gt;</code>. Só os pesos 400, 500, 600 e 700 de Sora.</p></div>
+        <div class="step"><div class="step-num">3</div><h4>Use as variáveis</h4><p>Nada de cor ou medida escrita direto no código: use <code>var(--vv-coral-strong)</code>, <code>var(--vv-space-6)</code> e assim por diante.</p></div>
+        <div class="step"><div class="step-num">4</div><h4>Confira o contraste</h4><p>Botão com texto branco usa <code>--vv-coral-strong</code>, nunca o coral do logo. Coral sobre fundo marinho usa <code>--vv-coral-bright</code>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <span>Vitrine Viva · design system interno</span>
+      <span>v1.0 · novembro de 2026</span>
+    </div>
+  </footer>
+</main>
+
+<script>
+  // Botões "Copiar": usa a área de transferência; se não puder, seleciona o texto
+  document.querySelectorAll('.copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var pre = btn.closest('.code-block').querySelector('pre');
+      var text = pre.innerText;
+      var done = function (label) {
+        btn.textContent = label;
+        btn.classList.add('copied');
+        setTimeout(function () { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+      };
+      var selectText = function () {
+        var range = document.createRange();
+        range.selectNodeContents(pre);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        done('Selecionado');
+      };
+      try {
+        navigator.clipboard.writeText(text).then(function () { done('Copiado!'); }, selectText);
+      } catch (e) { selectText(); }
+    });
+  });
+
+  // Destaca o módulo atual na barra lateral
+  var links = document.querySelectorAll('.sidebar a');
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        links.forEach(function (link) {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  document.querySelectorAll('.section[id]').forEach(function (s) { observer.observe(s); });
+
+  // O formulário é só demonstração
+  document.getElementById('form-demo').addEventListener('submit', function (e) { e.preventDefault(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+/* Vitrine Viva — design tokens v1.0 */
+:root {
+  /* ===== CORES — Marca ===== */
+  --vv-coral: #E8461F;
+  --vv-coral-strong: #C2391A;
+  --vv-coral-deep: #A3311A;
+  --vv-coral-bright: #FF6A45;
+  --vv-coral-100: #FDECE6;
+  --vv-navy-950: #0E1629;
+  --vv-navy: #16213E;
+  --vv-navy-700: #243258;
+  --vv-navy-300: #A3ABBD;
+  --vv-navy-100: #E3E6EC;
+  --vv-navy-50: #F4F5F7;
+
+  /* ===== CORES — Texto e superfícies ===== */
+  --vv-white: #FFFFFF;
+  --vv-text: #16213E;
+  --vv-text-muted: #555C70;
+  --vv-bg: #F4F5F7;
+  --vv-surface: #FFFFFF;
+  --vv-border: #E3E6EC;
+  --vv-border-strong: #C9CED9;
+
+  /* ===== CORES — Status ===== */
+  --vv-success: #0B7A5C;  --vv-success-bg: #E6F4EF;
+  --vv-warning: #8A5A0F;  --vv-warning-bg: #FBF1DD;
+  --vv-error: #C21F4E;    --vv-error-bg: #FBE6EC;
+  --vv-info: #2E62D9;     --vv-info-bg: #E7EEFC;
+
+  /* ===== TIPOGRAFIA ===== */
+  --vv-font: 'Sora', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --vv-font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --vv-text-xs: 0.75rem;
+  --vv-text-sm: 0.875rem;
+  --vv-text-md: 1rem;
+  --vv-text-lg: 1.125rem;
+  --vv-text-xl: 1.25rem;
+  --vv-text-2xl: 1.5rem;
+  --vv-text-3xl: 2rem;
+  --vv-text-4xl: 2.5rem;
+  --vv-text-5xl: 3.5rem;
+  --vv-text-6xl: 4.5rem;
+  --vv-tracking-display: -0.045em;
+  --vv-tracking-heading: -0.03em;
+  --vv-tracking-label: 0.14em;
+
+  /* ===== ESPAÇAMENTO — base 4px ===== */
+  --vv-space-1: 4px;
+  --vv-space-2: 8px;
+  --vv-space-3: 12px;
+  --vv-space-4: 16px;
+  --vv-space-6: 24px;
+  --vv-space-8: 32px;
+  --vv-space-12: 48px;
+  --vv-space-16: 64px;
+  --vv-space-24: 96px;
+  --vv-space-32: 128px;
+
+  /* ===== BORDAS ===== */
+  --vv-radius-sm: 6px;
+  --vv-radius-md: 10px;
+  --vv-radius-lg: 16px;
+  --vv-radius-xl: 24px;
+  --vv-radius-full: 9999px;
+
+  /* ===== SOMBRAS ===== */
+  --vv-shadow-xs: 0 1px 2px rgba(22, 33, 62, 0.06);
+  --vv-shadow-sm: 0 2px 8px rgba(22, 33, 62, 0.08);
+  --vv-shadow-md: 0 8px 24px rgba(22, 33, 62, 0.10);
+  --vv-shadow-lg: 0 20px 48px rgba(22, 33, 62, 0.14);
+  --vv-shadow-cta: 0 8px 20px rgba(194, 57, 26, 0.28);
+  --vv-focus-ring: 0 0 0 3px rgba(232, 70, 31, 0.40);
+
+  /* ===== MOVIMENTO ===== */
+  --vv-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --vv-duration: 200ms;
+}
