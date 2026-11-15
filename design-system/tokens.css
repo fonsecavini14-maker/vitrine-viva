@@ -70,6 +70,7 @@
   --vv-shadow-md: 0 8px 24px rgba(22, 33, 62, 0.10);
   --vv-shadow-lg: 0 20px 48px rgba(22, 33, 62, 0.14);
   --vv-shadow-cta: 0 8px 20px rgba(194, 57, 26, 0.28);
+  --vv-shadow-glow: 0 0 30px rgba(232, 70, 31, 0.30);
   --vv-focus-ring: 0 0 0 3px rgba(232, 70, 31, 0.40);
 
   /* ===== MOVIMENTO ===== */
